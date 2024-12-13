@@ -3,7 +3,7 @@ import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
-        // to ensure that GUI is executed on the Event Dispatch Thread
+        // to ensure GUI is executed on the Event Dispatch Thread
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
