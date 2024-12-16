@@ -1,0 +1,20 @@
+[
+  {
+    "songTitle": "Panettone",
+    "songArtist": "Carol Vault",
+    "songLength": "3:18",
+    "songPath": "src/assets/Panettone_Carol_Vault.mp3"
+  },
+  {
+    "songTitle": "Java life",
+    "songArtist": "Java",
+    "songLength": "3:12",
+    "songPath": "src/assets/Java_Life_Java.mp3"
+  },
+  {
+    "songTitle": "A whole new code",
+    "songArtist": "MiHaHa",
+    "songLength": "3:12",
+    "songPath": "src/assets/A_Whole_New_Code_MiHaHa.mp3"
+  }
+]

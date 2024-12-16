@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import static java.lang.Math.sqrt;
+
 public class MusicPlayerGUI extends JFrame {
     // color configuration
     public static final Color FRAME_COLOR = Color.BLACK;
@@ -12,7 +14,8 @@ public class MusicPlayerGUI extends JFrame {
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
-        setSize(400, 600);
+        int screenHeight = 700;
+        setSize((int) ((double)screenHeight/sqrt(2)), screenHeight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //launch the app at the center of the screen
@@ -29,13 +32,13 @@ public class MusicPlayerGUI extends JFrame {
         addToolBar();
 
         // recod image
-        JLabel songImage = new JLabel(loadImageIcon("src/assets/music.png", 200));
-        songImage.setBounds(10, 50, getWidth() - 20, (int) ((double) 225));
+        JLabel songImage = new JLabel(loadImageIcon("src/assets/music.png", 250));
+        songImage.setBounds(0, 50, getWidth() - 20, 255);
         add(songImage);
 
         // title
         JLabel songTitle = new JLabel("Song title");
-        songTitle.setBounds(0, 285, getWidth()-10, 30);
+        songTitle.setBounds(0, 325, getWidth()-10, 30);
         songTitle.setFont(new Font("Dialog", Font.BOLD, 24));
         songTitle.setForeground(TEXT_COLOR);
         songTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -43,7 +46,7 @@ public class MusicPlayerGUI extends JFrame {
 
         // artist
         JLabel artist = new JLabel("Artist");
-        artist.setBounds(0, 320, getWidth()-10, 30);
+        artist.setBounds(0, 365, getWidth()-10, 30);
         artist.setFont(new Font("Dialog", Font.PLAIN, 20));
         artist.setForeground(TEXT_COLOR);
         artist.setHorizontalAlignment(SwingConstants.CENTER);
@@ -96,52 +99,25 @@ public class MusicPlayerGUI extends JFrame {
         add(toolBar);
     }
 
-    /*private ImageIcon loadImageIcon(String imagePath, int newWidth) {
+    private ImageIcon loadImageIcon(String imagePath, int newWidth) {
         try {
             BufferedImage image = ImageIO.read(new File(imagePath));
             int newHeight = (int) ((double) image.getHeight() / image.getWidth() * newWidth);
-
             Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null; // only if image not found
-    }*/
-
-    private ImageIcon loadImageIcon(String imagePath, int newWidth) {
-        try {
-            // Carica l'immagine originale
-            BufferedImage originalImage = ImageIO.read(new File(imagePath));
-
-            // Calcola la nuova altezza mantenendo il rapporto d'aspetto
-            int originalWidth = originalImage.getWidth();
-            int originalHeight = originalImage.getHeight();
-            int newHeight = (int) ((double) originalHeight / originalWidth * newWidth);
-
-            // Crea un'immagine ridimensionata
-            BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-
-            // Applica una trasformazione di scala
-            Graphics2D g2d = resizedImage.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-            g2d.dispose(); // Libera le risorse grafiche
-
-            // Ritorna l'immagine come ImageIcon
-            return new ImageIcon(resizedImage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // Se l'immagine non viene caricata
-        }
     }
 
     private void addSlider() {
         // create slider, set dimensions & style
+        int sliderLength = 350;
         JSlider playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
-        playerBackSlider.setBounds(getWidth() / 2 - 300 / 2, 365, 300, 30);
-        playerBackSlider.setBackground(null); // remove background
+        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 405, sliderLength, 30);
         playerBackSlider.setOpaque(false); // transparent background
+        playerBackSlider.setBackground(null); // remove background
 
         // cursor style
         playerBackSlider.setUI(new javax.swing.plaf.basic.BasicSliderUI(playerBackSlider) {
@@ -181,29 +157,32 @@ public class MusicPlayerGUI extends JFrame {
 
     private void addNavigationButtons() {
         JPanel navigationButtons = new JPanel();
-        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 400, 300, 100);
+        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 450, 300, 100);
         navigationButtons.setBackground(null);
+        int buttonWidth = 60;
 
         // previous button
-        JButton backButton = new JButton(loadImageIcon("src/assets/backward.png", 50));
+        JButton backButton = new JButton(loadImageIcon("src/assets/backward.png", buttonWidth));
         backButton.setBorderPainted(false);
         backButton.setBackground(null);
         navigationButtons.add(backButton);
 
         // play button
-        JButton playButton = new JButton(loadImageIcon("src/assets/play.png", 50));
+        JButton playButton = new JButton(loadImageIcon("src/assets/play.png", buttonWidth));
         playButton.setBorderPainted(false);
         playButton.setBackground(null);
+        playButton.setVisible(true);
         navigationButtons.add(playButton);
 
         // pause button
-        JButton pauseButton = new JButton(loadImageIcon("src/assets/pause.png", 50));
+        JButton pauseButton = new JButton(loadImageIcon("src/assets/pause.png", buttonWidth));
         pauseButton.setBorderPainted(false);
         pauseButton.setBackground(null);
+        pauseButton.setVisible(false);
         navigationButtons.add(pauseButton);
 
         // next button
-        JButton nextButton = new JButton(loadImageIcon("src/assets/forward.png", 50));
+        JButton nextButton = new JButton(loadImageIcon("src/assets/forward.png", buttonWidth));
         nextButton.setBorderPainted(false);
         nextButton.setBackground(null);
         navigationButtons.add(nextButton);
