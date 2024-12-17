@@ -10,13 +10,16 @@ import java.io.File;
 import static java.lang.Math.sqrt;
 
 public class MusicPlayerGUI extends JFrame {
+    private final JFileChooser fileChooser;
+    private File selectedFile;
+
     // color configuration
     public static final Color FRAME_COLOR = Color.BLACK;
     public static final Color TEXT_COLOR = Color.WHITE;
 
     private MusicPlayer musicPlayer;
-    private final JFileChooser fileChooser; // simple mechanism for the user to choose a file
-    private File selectedFile;
+    //private final JFileChooser fileChooser; // simple mechanism for the user to choose a file
+    //private File selectedFile;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -33,8 +36,7 @@ public class MusicPlayerGUI extends JFrame {
         getContentPane().setBackground(FRAME_COLOR);
 
         fileChooser = new JFileChooser();
-
-        fileChooser.setCurrentDirectory(new File("src/assets"));
+        fileChooser.setCurrentDirectory(new File("src/assets/mp3"));
 
         addGuiComponents();
     }
@@ -83,6 +85,10 @@ public class MusicPlayerGUI extends JFrame {
         JMenu songMenu = new JMenu("Song");
         menuBar.add(songMenu);
 
+        // display songs in json file
+        JMenuItem yourSongs = new JMenuItem("Your songs");
+        songMenu.add(yourSongs);
+
         // load item
         JMenuItem loadSong = new JMenuItem("Load song");
         loadSong.addActionListener(new ActionListener() {
@@ -90,15 +96,22 @@ public class MusicPlayerGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 fileChooser.showOpenDialog(MusicPlayerGUI.this);
                 selectedFile = fileChooser.getSelectedFile();
+                String selectedPath = selectedFile.getPath();
 
-                if(selectedFile != null) {
-
-                    Song song = new Song(selectedFile.getPath()); // new song object
-                    musicPlayer.loadSong(song);
-                }
+                SongLoadingWindow songLoadingWindow = new SongLoadingWindow(selectedPath);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        songLoadingWindow.createAndShowGUI();
+                    }
+                });
             }
         });
         songMenu.add(loadSong);
+
+        // delete song
+        JMenuItem deleteSongs = new JMenuItem("Delete song");
+        songMenu.add(deleteSongs);
 
     // playlist menu
         JMenu playListMenu = new JMenu("Playlist");
@@ -107,10 +120,6 @@ public class MusicPlayerGUI extends JFrame {
         // create item
         JMenuItem createPlayList = new JMenuItem("Create playlist");
         playListMenu.add(createPlayList);
-
-        // load item
-        JMenuItem loadPlayList = new JMenuItem("Load playlist");
-        playListMenu.add(loadPlayList);
 
         // delete item
         JMenuItem deletePlayList = new JMenuItem("Delete playlist");

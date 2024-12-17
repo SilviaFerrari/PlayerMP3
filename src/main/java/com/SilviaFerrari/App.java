@@ -19,15 +19,6 @@ public class App {
             // adding new song to database
             Song newSong = new Song("New Song Title", "New Artist", "3:45", "path/to/newSong.mp3");
             database.addSong(newSong);
-
-            System.out.println("\nDatabase aggiornato:");
-            songs = database.getAllSongs();
-            for (Song song : songs) {
-                System.out.println("Title: " + song.getSongTitle() +
-                        ", Artist: " + song.getSongArtist() +
-                        ", Length: " + song.getSongLength() +
-                        ", Path: " + song.getSongPath());
-            }
             */
         } catch (Exception e) {
             e.printStackTrace();
