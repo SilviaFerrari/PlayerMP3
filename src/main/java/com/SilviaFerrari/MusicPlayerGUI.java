@@ -2,6 +2,8 @@ package com.SilviaFerrari;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -11,6 +13,10 @@ public class MusicPlayerGUI extends JFrame {
     // color configuration
     public static final Color FRAME_COLOR = Color.BLACK;
     public static final Color TEXT_COLOR = Color.WHITE;
+
+    private MusicPlayer musicPlayer;
+    private final JFileChooser fileChooser; // simple mechanism for the user to choose a file
+    private File selectedFile;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -25,6 +31,11 @@ public class MusicPlayerGUI extends JFrame {
 
         // color setting
         getContentPane().setBackground(FRAME_COLOR);
+
+        fileChooser = new JFileChooser();
+
+        fileChooser.setCurrentDirectory(new File("src/assets"));
+
         addGuiComponents();
     }
 
@@ -74,6 +85,19 @@ public class MusicPlayerGUI extends JFrame {
 
         // load item
         JMenuItem loadSong = new JMenuItem("Load song");
+        loadSong.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileChooser.showOpenDialog(MusicPlayerGUI.this);
+                selectedFile = fileChooser.getSelectedFile();
+
+                if(selectedFile != null) {
+
+                    Song song = new Song(selectedFile.getPath()); // new song object
+                    musicPlayer.loadSong(song);
+                }
+            }
+        });
         songMenu.add(loadSong);
 
     // playlist menu
@@ -126,7 +150,7 @@ public class MusicPlayerGUI extends JFrame {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smooth
                 g2.setColor(new Color(0xFF4081)); // color
-                int thumbSize = 15; // dimension
+                int thumbSize = 17; // dimension in px
                 g2.fillOval(        // draw circle
                         thumbRect.x + thumbRect.width / 2 - thumbSize / 2,
                         thumbRect.y + thumbRect.height / 2 - thumbSize / 2, thumbSize, thumbSize
@@ -139,7 +163,7 @@ public class MusicPlayerGUI extends JFrame {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smooth
 
                 // background bar
-                int trackHeight = 6;
+                int trackHeight = 8;
                 int trackY = trackRect.y + (trackRect.height - trackHeight) / 2;
                 Color trackColor = new Color(0xFFFFFF);
                 g2.setColor(trackColor);
