@@ -1,5 +1,4 @@
 package com.SilviaFerrari;
-import jdk.internal.access.JavaNioAccess;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,6 +13,7 @@ import static java.lang.Math.sqrt;
 public class MusicPlayerGUI extends JFrame {
     private final JFileChooser fileChooser;
     private File selectedFile;
+    MusicPlayer musicPlayer = new MusicPlayer();
 
     // color configuration
     public static final Color FRAME_COLOR = Color.BLACK;
@@ -34,8 +34,6 @@ public class MusicPlayerGUI extends JFrame {
 
         // color setting
         getContentPane().setBackground(FRAME_COLOR);
-
-        MusicPlayer musicPlayer = new MusicPlayer();
 
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("src/assets/mp3")); // default path
