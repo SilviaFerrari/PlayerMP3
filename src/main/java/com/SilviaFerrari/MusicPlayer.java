@@ -11,6 +11,7 @@ public class MusicPlayer extends PlaybackListener {
     private Song currentSong;
     private AdvancedPlayer advancedPlayer;
     private boolean isPaused;
+    private int currentFrame;
 
     public MusicPlayer() {} // constructor
 
@@ -57,7 +58,11 @@ public class MusicPlayer extends PlaybackListener {
             @Override
             public void run() {
                 try {
-                    advancedPlayer.play();
+                    if(isPaused) {
+                        advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
+                    } else{
+                        advancedPlayer.play();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -75,5 +80,9 @@ public class MusicPlayer extends PlaybackListener {
     public void playbackFinished(PlaybackEvent evt) {
         // called in the beginning of the song
         System.out.println("playback finished");
+        if(isPaused) {
+            currentFrame += (int) ((double) evt.getFrame() * currentSong.getFrameRatePerMilliseconds());
+            System.out.println("Stopped at @" + currentFrame);
+        }
     }
 }
