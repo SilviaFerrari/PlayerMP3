@@ -195,7 +195,7 @@ public class MusicPlayerGUI extends JFrame {
         // create slider, set dimensions & style
         int sliderLength = 350;
         JSlider playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
-        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 405, sliderLength, 30);
+        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 420, sliderLength, 30);
         playerBackSlider.setOpaque(false); // transparent background
         playerBackSlider.setBackground(null); // remove background
 
@@ -237,7 +237,7 @@ public class MusicPlayerGUI extends JFrame {
 
     private void addNavigationButtons() {
         navigationButtons = new JPanel();
-        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 450, 300, 100);
+        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 470, 300, 100);
         navigationButtons.setBackground(null);
         int buttonWidth = 60;
 
