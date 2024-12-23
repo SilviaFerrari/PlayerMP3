@@ -1,4 +1,6 @@
 package com.SilviaFerrari;
+import jdk.internal.access.JavaNioAccess;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +19,7 @@ public class MusicPlayerGUI extends JFrame {
     public static final Color FRAME_COLOR = Color.BLACK;
     public static final Color TEXT_COLOR = Color.WHITE;
 
-    private MusicPlayer musicPlayer;
-    //private final JFileChooser fileChooser; // simple mechanism for the user to choose a file
-    //private File selectedFile;
+    private JLabel songTitle, songArtist;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -35,8 +35,10 @@ public class MusicPlayerGUI extends JFrame {
         // color setting
         getContentPane().setBackground(FRAME_COLOR);
 
+        MusicPlayer musicPlayer = new MusicPlayer();
+
         fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File("src/assets/mp3"));
+        fileChooser.setCurrentDirectory(new File("src/assets/mp3")); // default path
 
         addGuiComponents();
     }
@@ -50,7 +52,7 @@ public class MusicPlayerGUI extends JFrame {
         add(songImage);
 
         // title
-        JLabel songTitle = new JLabel("Song title");
+       songTitle = new JLabel("Song title");
         songTitle.setBounds(0, 325, getWidth()-10, 30);
         songTitle.setFont(new Font("Dialog", Font.BOLD, 24));
         songTitle.setForeground(TEXT_COLOR);
@@ -58,12 +60,12 @@ public class MusicPlayerGUI extends JFrame {
         add(songTitle);
 
         // artist
-        JLabel artist = new JLabel("Artist");
-        artist.setBounds(0, 365, getWidth()-10, 30);
-        artist.setFont(new Font("Dialog", Font.PLAIN, 20));
-        artist.setForeground(TEXT_COLOR);
-        artist.setHorizontalAlignment(SwingConstants.CENTER);
-        add(artist);
+        songArtist = new JLabel("Artist");
+        songArtist.setBounds(0, 365, getWidth()-10, 30);
+        songArtist.setFont(new Font("Dialog", Font.PLAIN, 20));
+        songArtist.setForeground(TEXT_COLOR);
+        songArtist.setHorizontalAlignment(SwingConstants.CENTER);
+        add(songArtist);
 
         // slider
         addSlider();
@@ -85,8 +87,22 @@ public class MusicPlayerGUI extends JFrame {
         JMenu songMenu = new JMenu("Song");
         menuBar.add(songMenu);
 
-        // display songs in json file
+        // display songs from json file
         JMenuItem yourSongs = new JMenuItem("Your songs");
+        yourSongs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                YourSongsWindow yourSongsWindow = new YourSongsWindow();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        YourSongsWindow.createAndShowGUI();
+                    }
+                });
+                Song songToPlay = yourSongsWindow.getSelectedSong();
+                musicPlayer.loadSong(songToPlay);
+            }
+        });
         songMenu.add(yourSongs);
 
         // load item

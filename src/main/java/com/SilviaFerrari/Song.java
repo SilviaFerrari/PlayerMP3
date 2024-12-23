@@ -12,7 +12,7 @@ public class Song {
     private String songLength;
     private String songPath;
 
-    public Song() {} // void constructor for jackson
+    //public Song() {} // void constructor for jackson
 
     @JsonCreator
     public Song(@JsonProperty("songTitle") String songTitle,
@@ -34,12 +34,22 @@ public class Song {
         return songArtist;
     }
 
-    public String getSongLength() {
+    public String getSongDuration() {
         return songLength;
     }
 
     public String getSongPath() {
         return songPath;
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "title='" + songTitle + '\'' +
+                ", artist='" + songArtist + '\'' +
+                ", duration='" + songLength + '\'' +
+                ", path='" + songPath + '\'' +
+                '}';
     }
 
     // serialize in json (java object --> json)

@@ -6,13 +6,13 @@ public class App {
     public static void main(String[] args) {
         try {
             // database initialization from json file
-            SongDatabase database = new SongDatabase("songs.json");
-            List<Song> songs = database.getAllSongs();
+            SongDatabase database = new SongDatabase("src/main/resources/songs.json");
+            List<Song> songs = database.getSongs();
             System.out.println("Canzoni esistenti nel database:");
             for (Song song : songs) {
                 System.out.println("Title: " + song.getSongTitle() +
                         ", Artist: " + song.getSongArtist() +
-                        ", Length: " + song.getSongLength() +
+                        ", Length: " + song.getSongDuration() +
                         ", Path: " + song.getSongPath());
             }
             /*

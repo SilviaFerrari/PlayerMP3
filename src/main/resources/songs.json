@@ -1,14 +1,3 @@
-[
-  {
-    "songTitle": "Java life",
-    "songArtist": "Java",
-    "songLength": "3:12",
-    "songPath": "src/assets/mp3/Java_Life_Java.mp3"
-  },
-  {
-    "songTitle": "A whole new code",
-    "songArtist": "MiHaHa",
-    "songLength": "3:12",
-    "songPath": "src/assets/mp3/A_Whole_New_Code_MiHaHa.mp3"
-  }
-]
+[{"songTitle":"Java life","songArtist":"Java","songLength":"3:12","songPath":"src/assets/mp3/Java_Life_Java.mp3"},
+  {"songTitle":"A whole new code","songArtist":"MiHaHa","songLength":"3:12","songPath":"src/assets/mp3/A_Whole_New_Code_MiHaHa.mp3"},
+  {"songTitle":"Panettone","songArtist":"Carol","songLength":"3:18","songPath":"C:\\Users\\Utente\\IdeaProjects\\PlayerMP3\\src\\assets\\mp3\\Panettone_Carol_Vault.mp3"}]

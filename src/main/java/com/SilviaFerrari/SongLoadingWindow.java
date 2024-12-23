@@ -23,7 +23,6 @@ public class SongLoadingWindow {
     static void createAndShowGUI() {
         // main window (centered)
         JFrame frame = new JFrame("Choose an MP3 file");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(350, 200);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
@@ -36,17 +35,17 @@ public class SongLoadingWindow {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // title field style
-        JLabel titleLabel = new JLabel("Titolo:");
+        JLabel titleLabel = new JLabel("Title:");
         JTextField titleField = new JTextField(20);
         addComponent(panel, titleLabel, titleField, gbc, 0);
 
         // artist field style
-        JLabel artistLabel = new JLabel("Artista:");
+        JLabel artistLabel = new JLabel("Artist:");
         JTextField artistField = new JTextField(20);
         addComponent(panel, artistLabel, artistField, gbc, 1);
 
         // duration field style
-        JLabel durationLabel = new JLabel("Durata:");
+        JLabel durationLabel = new JLabel("Duration:");
         JTextField durationField = new JTextField(20);
         addComponent(panel, durationLabel, durationField, gbc, 2);
 
@@ -76,16 +75,12 @@ public class SongLoadingWindow {
             // create a new object song and add to file json
             try {
                 Song newSong = new Song(title, artist, duration, selectedPath);
-                SongDatabase database = new SongDatabase("songs.json");
+                SongDatabase database = new SongDatabase("src/main/resources/songs.json");
                 database.addSong(newSong);
 
                 JOptionPane.showMessageDialog(frame, "Song added succesfull.", "Done!", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("New song added: " + newSong);
 
-                // clear fields
-                titleField.setText("");
-                artistField.setText("");
-                durationField.setText("");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Database saving gone wrong.", "Error:", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
