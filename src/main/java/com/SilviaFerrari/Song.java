@@ -2,10 +2,7 @@ package com.SilviaFerrari;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mpatric.mp3agic.Mp3File;
-
-import java.io.IOException;
 
 public class Song {
     private String songTitle;
@@ -14,8 +11,6 @@ public class Song {
     private String songPath;
     private Mp3File mp3File;
     private double frameRatePerMilliseconds;
-
-    //public Song() {} // void constructor for jackson
 
     @JsonCreator
     public Song(@JsonProperty("songTitle") String songTitle,
@@ -34,7 +29,6 @@ public class Song {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public String getSongTitle() {
@@ -60,30 +54,4 @@ public class Song {
     public Mp3File getMp3File() {
         return mp3File;
     }
-
-    /*
-    @Override
-    public String toString() {
-        return "Song{" +
-                "title='" + songTitle + '\'' +
-                ", artist='" + songArtist + '\'' +
-                ", duration='" + songDuration + '\'' +
-                ", path='" + songPath + '\'' +
-                '}';
-    }
-     */
-
-/*
-    // serialize in json (java object --> json)
-    public String toJson() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(this);
-    }
-
-    // deserialize from JSON (json --> java object)
-    public static Song fromJson(String json) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, Song.class);
-    }
- */
 }
