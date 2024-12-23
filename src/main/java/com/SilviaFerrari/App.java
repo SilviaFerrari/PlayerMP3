@@ -12,14 +12,9 @@ public class App {
             for (Song song : songs) {
                 System.out.println("Title: " + song.getSongTitle() +
                         ", Artist: " + song.getSongArtist() +
-                        ", Length: " + song.getSongDuration() +
+                        ", Duration: " + song.getSongDuration() +
                         ", Path: " + song.getSongPath());
             }
-            /*
-            // adding new song to database
-            Song newSong = new Song("New Song Title", "New Artist", "3:45", "path/to/newSong.mp3");
-            database.addSong(newSong);
-            */
         } catch (Exception e) {
             e.printStackTrace();
         }

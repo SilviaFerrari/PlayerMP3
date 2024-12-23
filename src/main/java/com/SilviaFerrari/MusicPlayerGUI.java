@@ -2,6 +2,7 @@ package com.SilviaFerrari;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ public class MusicPlayerGUI extends JFrame {
     public static final Color TEXT_COLOR = Color.WHITE;
 
     private JLabel songTitle, songArtist;
+    private JPanel navigationButtons;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -37,6 +39,7 @@ public class MusicPlayerGUI extends JFrame {
 
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("src/assets/mp3")); // default path
+        fileChooser.setFileFilter(new FileNameExtensionFilter("MP3", "mp3"));
 
         addGuiComponents();
     }
@@ -50,7 +53,7 @@ public class MusicPlayerGUI extends JFrame {
         add(songImage);
 
         // title
-       songTitle = new JLabel("Song title");
+        songTitle = new JLabel("Song title");
         songTitle.setBounds(0, 325, getWidth()-10, 30);
         songTitle.setFont(new Font("Dialog", Font.BOLD, 24));
         songTitle.setForeground(TEXT_COLOR);
@@ -85,20 +88,21 @@ public class MusicPlayerGUI extends JFrame {
         JMenu songMenu = new JMenu("Song");
         menuBar.add(songMenu);
 
-        // display songs from json file
+        // play song
         JMenuItem yourSongs = new JMenuItem("Your songs");
-        yourSongs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                YourSongsWindow yourSongsWindow = new YourSongsWindow();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        YourSongsWindow.createAndShowGUI();
-                    }
-                });
-                Song songToPlay = yourSongsWindow.getSelectedSong();
-                musicPlayer.loadSong(songToPlay);
+        yourSongs.addActionListener(e -> {
+            YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
+            yourSongsWindow.setVisible(true);
+
+            Song selectedSong = yourSongsWindow.getSelectedSong();
+            if (selectedSong != null) {
+                System.out.println("Selected song: " + selectedSong.getSongTitle() + " by " + selectedSong.getSongArtist());
+                // Utilizza l'oggetto Song come preferisci
+                musicPlayer.loadSong(selectedSong);
+                updateSongInformation(selectedSong);
+                pauseSongButton();
+            } else {
+                System.out.println("No song selected.");
             }
         });
         songMenu.add(yourSongs);
@@ -144,6 +148,35 @@ public class MusicPlayerGUI extends JFrame {
         playListMenu.add(renamePlayList);
 
         add(toolBar);
+    }
+
+    private void updateSongInformation(Song song){
+        songTitle.setText(song.getSongTitle());
+        songArtist.setText(song.getSongArtist());
+    }
+
+    private void pauseSongButton() {
+        JButton playButton = (JButton) navigationButtons.getComponent(1);
+        JButton pauseButton = (JButton) navigationButtons.getComponent(2);
+
+        // turn off play button
+        playButton.setEnabled(false);
+        playButton.setVisible(false);
+        // turn on pause button
+        pauseButton.setVisible(true);
+        pauseButton.setEnabled(true);
+    }
+
+    private void playSongButton() {
+        JButton playButton = (JButton) navigationButtons.getComponent(1);
+        JButton pauseButton = (JButton) navigationButtons.getComponent(2);
+
+        // turn on play button
+        playButton.setEnabled(true);
+        playButton.setVisible(true);
+        // turn off pause button
+        pauseButton.setVisible(false);
+        pauseButton.setEnabled(false);
     }
 
     private ImageIcon loadImageIcon(String imagePath, int newWidth) {
@@ -203,7 +236,7 @@ public class MusicPlayerGUI extends JFrame {
     }
 
     private void addNavigationButtons() {
-        JPanel navigationButtons = new JPanel();
+        navigationButtons = new JPanel();
         navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 450, 300, 100);
         navigationButtons.setBackground(null);
         int buttonWidth = 60;
@@ -219,6 +252,13 @@ public class MusicPlayerGUI extends JFrame {
         playButton.setBorderPainted(false);
         playButton.setBackground(null);
         playButton.setVisible(true);
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pauseSongButton();
+                musicPlayer.playCurrentSong();
+            }
+        });
         navigationButtons.add(playButton);
 
         // pause button
@@ -226,6 +266,13 @@ public class MusicPlayerGUI extends JFrame {
         pauseButton.setBorderPainted(false);
         pauseButton.setBackground(null);
         pauseButton.setVisible(false);
+        pauseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSongButton();
+                musicPlayer.pauseSong();
+            }
+        });
         navigationButtons.add(pauseButton);
 
         // next button

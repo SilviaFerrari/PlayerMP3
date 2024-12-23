@@ -1,14 +1,16 @@
 package com.SilviaFerrari;
 
 import javazoom.jl.player.advanced.AdvancedPlayer;
+import javazoom.jl.player.advanced.PlaybackEvent;
+import javazoom.jl.player.advanced.PlaybackListener;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
-public class MusicPlayer {
+public class MusicPlayer extends PlaybackListener {
     private Song currentSong;
-
     private AdvancedPlayer advancedPlayer;
+    private boolean isPaused;
 
     public MusicPlayer() {} // constructor
 
@@ -19,12 +21,31 @@ public class MusicPlayer {
         }
     }
 
+    public void pauseSong() {
+        if(advancedPlayer != null) {
+            isPaused = true;
+            stopSong();
+        }
+    }
+
+    public void stopSong() {
+        if(advancedPlayer != null) {
+            advancedPlayer.stop();
+            advancedPlayer.close();
+            advancedPlayer = null;
+        }
+    }
+
     public void playCurrentSong() {
         try{
             // mp3 data reading
+            stopSong();
             FileInputStream fileInputStream = new FileInputStream(currentSong.getSongPath());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+
             advancedPlayer = new AdvancedPlayer(bufferedInputStream); // create a new player
+            advancedPlayer.setPlayBackListener(this);
+
             startMusicThread(); // start music
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,5 +63,17 @@ public class MusicPlayer {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void playbackStarted(PlaybackEvent evt) {
+        // called in the end/pause of the song
+        System.out.println("playback started");
+    }
+
+    @Override
+    public void playbackFinished(PlaybackEvent evt) {
+        // called in the beginning of the song
+        System.out.println("playback finished");
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Song {
     private String songTitle;
     private String songArtist;
-    private String songLength;
+    private String songDuration;
     private String songPath;
 
     //public Song() {} // void constructor for jackson
@@ -22,7 +22,7 @@ public class Song {
     {
         this.songTitle = songTitle;
         this.songArtist = songArtist;
-        this.songLength = songLength;
+        this.songDuration = songDuration;
         this.songPath = songPath;
     }
 
@@ -35,7 +35,7 @@ public class Song {
     }
 
     public String getSongDuration() {
-        return songLength;
+        return songDuration;
     }
 
     public String getSongPath() {
@@ -47,7 +47,7 @@ public class Song {
         return "Song{" +
                 "title='" + songTitle + '\'' +
                 ", artist='" + songArtist + '\'' +
-                ", duration='" + songLength + '\'' +
+                ", duration='" + songDuration + '\'' +
                 ", path='" + songPath + '\'' +
                 '}';
     }
