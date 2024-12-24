@@ -8,7 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
 public class MusicPlayer extends PlaybackListener {
-    private Song currentSong;
+    private Song currentSong = null;
     private AdvancedPlayer advancedPlayer;
     private boolean isPaused = false;
     private int currentFrame;
@@ -72,6 +72,10 @@ public class MusicPlayer extends PlaybackListener {
                 }
             }
         }).start();
+    }
+
+    public Song getCurrentSong() {
+        return currentSong;
     }
 
     @Override

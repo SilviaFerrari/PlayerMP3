@@ -154,61 +154,6 @@ public class MusicPlayerGUI extends JFrame {
         add(toolBar);
     }
 
-    private void updateSongInformation(Song song){
-        songTitle.setText(song.getSongTitle());
-        songArtist.setText(song.getSongArtist());
-    }
-
-    /*
-    private void updateSlider(Song song){
-        // update max count
-        playerBackSlider.setMaximum(song.getMp3File().getFrameCount());
-
-        // create song length label that start at 00:00
-        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-
-        JLabel labelBeginning = new JLabel("00:00");
-        labelBeginning.setFont(new Font("Dialog", Font.BOLD, 18));
-        labelBeginning.setForeground(TEXT_COLOR);
-
-        // the end depend on the song
-        JLabel labelEnd = new JLabel(song.getSongDuration());
-        labelBeginning.setFont(new Font("Dialog", Font.BOLD, 18));
-        labelBeginning.setForeground(TEXT_COLOR);
-
-        labelTable.put(0, labelBeginning);
-        labelTable.put(song.getMp3File().getFrameCount(), labelEnd);
-
-        playerBackSlider.setLabelTable(labelTable);
-        playerBackSlider.setPaintLabels(true);
-    }
-
-     */
-
-    private void pauseSongButton() {
-        JButton playButton = (JButton) navigationButtons.getComponent(1);
-        JButton pauseButton = (JButton) navigationButtons.getComponent(2);
-
-        // turn off play button
-        playButton.setEnabled(false);
-        playButton.setVisible(false);
-        // turn on pause button
-        pauseButton.setVisible(true);
-        pauseButton.setEnabled(true);
-    }
-
-    private void playSongButton() {
-        JButton playButton = (JButton) navigationButtons.getComponent(1);
-        JButton pauseButton = (JButton) navigationButtons.getComponent(2);
-
-        // turn on play button
-        playButton.setEnabled(true);
-        playButton.setVisible(true);
-        // turn off pause button
-        pauseButton.setVisible(false);
-        pauseButton.setEnabled(false);
-    }
-
     private ImageIcon loadImageIcon(String imagePath, int newWidth) {
         try {
             BufferedImage image = ImageIO.read(new File(imagePath));
@@ -221,52 +166,10 @@ public class MusicPlayerGUI extends JFrame {
         return null; // only if image not found
     }
 
-    /*
-    private void addSlider() {
-        // create slider, set dimensions & style
-        int sliderLength = 350;
-        playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
-        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 420, sliderLength, 50);
-        playerBackSlider.setOpaque(false); // transparent background
-        playerBackSlider.setBackground(null); // remove background
-
-        // cursor style
-        playerBackSlider.setUI(new javax.swing.plaf.basic.BasicSliderUI(playerBackSlider) {
-            @Override
-            public void paintThumb(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smooth
-                g2.setColor(new Color(0xFF4081)); // color
-                int thumbSize = 20; // dimension in px
-                g2.fillOval(        // draw circle
-                        thumbRect.x + thumbRect.width / 2 - thumbSize / 2,
-                        thumbRect.y + thumbRect.height / 2 - thumbSize / 2, thumbSize, thumbSize
-                );
-            }
-
-            @Override
-            public void paintTrack(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smooth
-
-                // background bar
-                int trackHeight = 8;
-                int trackY = trackRect.y + (trackRect.height - trackHeight) / 2;
-                Color trackColor = new Color(0xFFFFFF);
-                g2.setColor(trackColor);
-                g2.fillRoundRect(trackRect.x, trackY, trackRect.width, trackHeight, trackHeight, trackHeight);
-
-                // progress bar depends on cursor position
-                int progressWidth = thumbRect.x + thumbRect.width / 2 - trackRect.x;
-                Color progressColor = new Color(0xFF4081);
-                g2.setColor(progressColor);
-                g2.fillRoundRect(trackRect.x, trackY, progressWidth, trackHeight, trackHeight, trackHeight);
-            }
-        });
-        add(playerBackSlider);
+    private void updateSongInformation(Song song){
+        songTitle.setText(song.getSongTitle());
+        songArtist.setText(song.getSongArtist());
     }
-
-     */
 
     private void addSlider(){
         customSlider = new CustomSlider(
@@ -279,6 +182,32 @@ public class MusicPlayerGUI extends JFrame {
 
         customSlider.setBounds(getWidth() / 2 - 350 / 2, 420, 350, 50);
         add(customSlider);
+    }
+
+    private void pauseSongButton() {
+        if(musicPlayer.getCurrentSong() != null){
+            JButton playButton = (JButton) navigationButtons.getComponent(1);
+            JButton pauseButton = (JButton) navigationButtons.getComponent(2);
+
+            // turn off play button
+            playButton.setEnabled(false);
+            playButton.setVisible(false);
+            // turn on pause button
+            pauseButton.setVisible(true);
+            pauseButton.setEnabled(true);
+        }
+    }
+
+    private void playSongButton() {
+        JButton playButton = (JButton) navigationButtons.getComponent(1);
+        JButton pauseButton = (JButton) navigationButtons.getComponent(2);
+
+        // turn on play button
+        playButton.setEnabled(true);
+        playButton.setVisible(true);
+        // turn off pause button
+        pauseButton.setVisible(false);
+        pauseButton.setEnabled(false);
     }
 
     private void addNavigationButtons() {
@@ -301,8 +230,10 @@ public class MusicPlayerGUI extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pauseSongButton();
-                musicPlayer.playCurrentSong();
+                if(musicPlayer.getCurrentSong() != null){
+                    pauseSongButton();
+                    musicPlayer.playCurrentSong();
+                }
             }
         });
         navigationButtons.add(playButton);
