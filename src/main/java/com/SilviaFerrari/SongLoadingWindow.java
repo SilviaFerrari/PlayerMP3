@@ -44,17 +44,12 @@ public class SongLoadingWindow {
         JTextField artistField = new JTextField(20);
         addComponent(panel, artistLabel, artistField, gbc, 1);
 
-        // duration field style
-        JLabel durationLabel = new JLabel("Duration:");
-        JTextField durationField = new JTextField(20);
-        addComponent(panel, durationLabel, durationField, gbc, 2);
-
         // enter button style
         JButton submitButton = new JButton("Add song");
         submitButton.setFocusPainted(false);
         submitButton.setBackground(new Color(0, 120, 215));
         submitButton.setForeground(Color.WHITE);
-        submitButton.setFont(new Font("Arial", Font.BOLD, 14));
+        submitButton.setFont(new Font("Lexend", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -64,17 +59,16 @@ public class SongLoadingWindow {
         submitButton.addActionListener(e -> {
             String title = titleField.getText();
             String artist = artistField.getText();
-            String duration = durationField.getText();
 
             // verify empty filed
-            if (title.isEmpty() || artist.isEmpty() || duration.isEmpty()) {
+            if (title.isEmpty() || artist.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "You have to compile each filed.", "Error:", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // create a new object song and add to file json
             try {
-                Song newSong = new Song(title, artist, duration, selectedPath);
+                Song newSong = new Song(title, artist, selectedPath);
                 SongDatabase database = new SongDatabase("src/main/resources/songs.json");
                 database.addSong(newSong);
 

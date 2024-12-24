@@ -18,7 +18,7 @@ public class MusicPlayerGUI extends JFrame {
     MusicPlayer musicPlayer = new MusicPlayer();
 
     // color configuration
-    public static final Color FRAME_COLOR = Color.BLACK;
+    public static final Color FRAME_COLOR = new Color(22, 21, 26);
     public static final Color TEXT_COLOR = Color.WHITE;
 
     private JLabel songTitle, songArtist;
@@ -101,7 +101,9 @@ public class MusicPlayerGUI extends JFrame {
                 System.out.println("Selected song: " + selectedSong.getSongTitle() + " by " + selectedSong.getSongArtist());
                 musicPlayer.resetSong();
                 musicPlayer.loadSong(selectedSong);
+
                 updateSongInformation(selectedSong);
+                updateSlider(selectedSong);
                 pauseSongButton();
             } else {
                 System.out.println("No song selected.");
@@ -158,8 +160,26 @@ public class MusicPlayerGUI extends JFrame {
     }
 
     private void updateSlider(Song song){
-        playerBackSlider.setMaximum(song.getMp3File().getFrameCount()); // update max count for slider
+        // update max count
+        playerBackSlider.setMaximum(song.getMp3File().getFrameCount());
+
+        // create song length label that start at 00:00
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+
+        JLabel labelBeginning = new JLabel("00:00");
+        labelBeginning.setFont(new Font("Dialog", Font.BOLD, 18));
+        labelBeginning.setForeground(TEXT_COLOR);
+
+        // the end depend on the song
+        JLabel labelEnd = new JLabel(song.getSongDuration());
+        labelBeginning.setFont(new Font("Dialog", Font.BOLD, 18));
+        labelBeginning.setForeground(TEXT_COLOR);
+
+        labelTable.put(0, labelBeginning);
+        labelTable.put(song.getMp3File().getFrameCount(), labelEnd);
+
+        playerBackSlider.setLabelTable(labelTable);
+        playerBackSlider.setPaintLabels(true);
     }
 
     private void pauseSongButton() {

@@ -11,22 +11,22 @@ import java.io.IOException;
 import java.util.List;
 
 public class YourSongsWindow extends JDialog {
-    private Song selectedSong; // Canzone selezionata
+    private Song selectedSong;
 
     public YourSongsWindow(JFrame parent) {
-        super(parent, "Your Songs", true); // Finestra modale
+        super(parent, "Your Songs", true); // modal window
         setSize(450, 400);
         setLocationRelativeTo(parent);
 
-        // Stile della finestra
+        // window style
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(45, 45, 45));
 
         // window title
-        JLabel titleLabel = new JLabel("Select a Song to Play");
+        JLabel titleLabel = new JLabel("Select a song to play");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setFont(new Font("Lexend", Font.BOLD, 18));
         titleLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
         add(titleLabel, BorderLayout.NORTH);
 
@@ -43,7 +43,7 @@ public class YourSongsWindow extends JDialog {
         songJList.setCellRenderer(new SongCellRenderer());
         songJList.setBackground(new Color(55, 55, 55));
         songJList.setForeground(Color.WHITE);
-        songJList.setFont(new Font("Arial", Font.PLAIN, 14));
+        songJList.setFont(new Font("Lexend", Font.PLAIN, 14));
         songJList.setFixedCellHeight(40);
 
         JScrollPane scrollPane = new JScrollPane(songJList);
@@ -55,7 +55,7 @@ public class YourSongsWindow extends JDialog {
         selectButton.setFocusPainted(false);
         selectButton.setBackground(new Color(0, 153, 255));
         selectButton.setForeground(Color.WHITE);
-        selectButton.setFont(new Font("Arial", Font.BOLD, 14));
+        selectButton.setFont(new Font("Lexend", Font.BOLD, 14));
         selectButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         selectButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
