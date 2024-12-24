@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Hashtable;
 
 import static java.lang.Math.sqrt;
 
@@ -22,6 +23,7 @@ public class MusicPlayerGUI extends JFrame {
 
     private JLabel songTitle, songArtist;
     private JPanel navigationButtons;
+    private JSlider playerBackSlider;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -97,7 +99,7 @@ public class MusicPlayerGUI extends JFrame {
             Song selectedSong = yourSongsWindow.getSelectedSong();
             if (selectedSong != null) {
                 System.out.println("Selected song: " + selectedSong.getSongTitle() + " by " + selectedSong.getSongArtist());
-                // Utilizza l'oggetto Song come preferisci
+                musicPlayer.resetSong();
                 musicPlayer.loadSong(selectedSong);
                 updateSongInformation(selectedSong);
                 pauseSongButton();
@@ -155,6 +157,11 @@ public class MusicPlayerGUI extends JFrame {
         songArtist.setText(song.getSongArtist());
     }
 
+    private void updateSlider(Song song){
+        playerBackSlider.setMaximum(song.getMp3File().getFrameCount()); // update max count for slider
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+    }
+
     private void pauseSongButton() {
         JButton playButton = (JButton) navigationButtons.getComponent(1);
         JButton pauseButton = (JButton) navigationButtons.getComponent(2);
@@ -194,7 +201,7 @@ public class MusicPlayerGUI extends JFrame {
     private void addSlider() {
         // create slider, set dimensions & style
         int sliderLength = 350;
-        JSlider playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
+        playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
         playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 420, sliderLength, 30);
         playerBackSlider.setOpaque(false); // transparent background
         playerBackSlider.setBackground(null); // remove background

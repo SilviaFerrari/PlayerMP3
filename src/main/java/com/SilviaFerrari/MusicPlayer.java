@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 public class MusicPlayer extends PlaybackListener {
     private Song currentSong;
     private AdvancedPlayer advancedPlayer;
-    private boolean isPaused;
+    private boolean isPaused = false;
     private int currentFrame;
 
     public MusicPlayer() {} // constructor
@@ -35,6 +35,10 @@ public class MusicPlayer extends PlaybackListener {
             advancedPlayer.close();
             advancedPlayer = null;
         }
+    }
+
+    public void resetSong(){
+        isPaused = false;
     }
 
     public void playCurrentSong() {
