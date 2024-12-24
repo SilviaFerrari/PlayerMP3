@@ -19,11 +19,11 @@ public class MusicPlayerGUI extends JFrame {
 
     // color configuration
     public static final Color FRAME_COLOR = new Color(22, 21, 26);
-    public static final Color TEXT_COLOR = Color.WHITE;
+    public static final Color TEXT_COLOR = new Color(250,250,250);
 
     private JLabel songTitle, songArtist;
     private JPanel navigationButtons;
-    private JSlider playerBackSlider;
+    private CustomSlider customSlider;
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -49,14 +49,14 @@ public class MusicPlayerGUI extends JFrame {
     private void addGuiComponents() {
         addToolBar();
 
-        // recod image
+        // record image
         JLabel songImage = new JLabel(loadImageIcon("src/assets/music.png", 250));
         songImage.setBounds(0, 50, getWidth() - 20, 255);
         add(songImage);
 
         // title
         songTitle = new JLabel("Song title");
-        songTitle.setBounds(0, 325, getWidth()-10, 30);
+        songTitle.setBounds(0, 330, getWidth()-10, 30);
         songTitle.setFont(new Font("Dialog", Font.BOLD, 24));
         songTitle.setForeground(TEXT_COLOR);
         songTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -103,7 +103,7 @@ public class MusicPlayerGUI extends JFrame {
                 musicPlayer.loadSong(selectedSong);
 
                 updateSongInformation(selectedSong);
-                updateSlider(selectedSong);
+                customSlider.updateSlider(selectedSong);
                 pauseSongButton();
             } else {
                 System.out.println("No song selected.");
@@ -159,6 +159,7 @@ public class MusicPlayerGUI extends JFrame {
         songArtist.setText(song.getSongArtist());
     }
 
+    /*
     private void updateSlider(Song song){
         // update max count
         playerBackSlider.setMaximum(song.getMp3File().getFrameCount());
@@ -181,6 +182,8 @@ public class MusicPlayerGUI extends JFrame {
         playerBackSlider.setLabelTable(labelTable);
         playerBackSlider.setPaintLabels(true);
     }
+
+     */
 
     private void pauseSongButton() {
         JButton playButton = (JButton) navigationButtons.getComponent(1);
@@ -218,11 +221,12 @@ public class MusicPlayerGUI extends JFrame {
         return null; // only if image not found
     }
 
+    /*
     private void addSlider() {
         // create slider, set dimensions & style
         int sliderLength = 350;
         playerBackSlider = new JSlider(JSlider.HORIZONTAL, 0, 3000, 0);
-        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 420, sliderLength, 30);
+        playerBackSlider.setBounds(getWidth() / 2 - sliderLength / 2, 420, sliderLength, 50);
         playerBackSlider.setOpaque(false); // transparent background
         playerBackSlider.setBackground(null); // remove background
 
@@ -233,7 +237,7 @@ public class MusicPlayerGUI extends JFrame {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smooth
                 g2.setColor(new Color(0xFF4081)); // color
-                int thumbSize = 17; // dimension in px
+                int thumbSize = 20; // dimension in px
                 g2.fillOval(        // draw circle
                         thumbRect.x + thumbRect.width / 2 - thumbSize / 2,
                         thumbRect.y + thumbRect.height / 2 - thumbSize / 2, thumbSize, thumbSize
@@ -262,9 +266,24 @@ public class MusicPlayerGUI extends JFrame {
         add(playerBackSlider);
     }
 
+     */
+
+    private void addSlider(){
+        customSlider = new CustomSlider(
+                350,
+                3000,
+                new Color(0xFF4081), // progress bar
+                new Color(0xFFFFFF), // background bar
+                new Color(0xFF4081)  // cursor
+        );
+
+        customSlider.setBounds(getWidth() / 2 - 350 / 2, 420, 350, 50);
+        add(customSlider);
+    }
+
     private void addNavigationButtons() {
         navigationButtons = new JPanel();
-        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 470, 300, 100);
+        navigationButtons.setBounds(getWidth() / 2 - 300 / 2, 480, 300, 100);
         navigationButtons.setBackground(null);
         int buttonWidth = 60;
 

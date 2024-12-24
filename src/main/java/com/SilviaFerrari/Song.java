@@ -31,8 +31,8 @@ public class Song {
     }
 
     private String convertToSongDuration(){
-        long minutes = mp3File.getLengthInMilliseconds() / 60;
-        long seconds = mp3File.getLengthInMilliseconds() % 60;
+        long minutes = mp3File.getLengthInSeconds() / 60;
+        long seconds = mp3File.getLengthInSeconds() % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 
@@ -45,7 +45,7 @@ public class Song {
     }
 
     public String getSongDuration() {
-        return songDuration;
+        return convertToSongDuration();
     }
 
     public String getSongPath() {
