@@ -7,6 +7,7 @@ import java.util.Hashtable;
 
 public class CustomSlider extends JPanel {
     private JSlider slider;
+    private JLabel labelBeginning = new JLabel();
     public static final Color TEXT_COLOR = new Color(250,250,250);
 
     public CustomSlider(int sliderLength, int maxFrames, Color progressColor, Color trackColor, Color thumbColor) {
@@ -60,7 +61,7 @@ public class CustomSlider extends JPanel {
         slider.setMaximum(song.getMp3File().getFrameCount());
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 
-        JLabel labelBeginning = new JLabel("00:00");
+        labelBeginning.setText("00:00");
         labelBeginning.setFont(new Font("Dialog", Font.BOLD, 18));
         labelBeginning.setForeground(TEXT_COLOR);
 
@@ -75,7 +76,22 @@ public class CustomSlider extends JPanel {
         slider.setPaintLabels(true);
     }
 
-    public JSlider getSlider() {
-        return slider;
+    public void updateTimeTrack(int minutes, int seconds) {
+        if(seconds < 10 && minutes < 10){
+            labelBeginning.setText("0" + minutes + ":0" + seconds);
+        }
+        else if(seconds < 10 && minutes >= 10){
+            labelBeginning.setText(minutes + ":0" + seconds);
+        }
+        else if(seconds >= 10 && minutes < 10){
+            labelBeginning.setText("0" + minutes + ":" + seconds);
+        }
+        else {
+            labelBeginning.setText(minutes + ":" + seconds);
+        }
+    }
+
+    public void setSliderValue(int frame){
+        slider.setValue(frame);
     }
 }

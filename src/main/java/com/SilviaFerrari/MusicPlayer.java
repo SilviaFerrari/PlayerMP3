@@ -8,15 +8,24 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
 public class MusicPlayer extends PlaybackListener {
-    private Song currentSong = null;
+    private Song currentSong;
+    private CustomSlider customSlider;
     private AdvancedPlayer advancedPlayer;
-    private boolean isPaused = false;
-    private int currentFrame;
 
-    public MusicPlayer() {} // constructor
+    private boolean isPaused;
+    private int currentFrame;
+    private int currentTimeInMilliseconds;
+
+    // to fix isPause synchronous
+    private static final Object playSignal = new Object();
+
+    public void setCustomSlider(CustomSlider customSlider) {
+        this.customSlider = customSlider;
+    }
 
     public void loadSong(Song song) {
         currentSong = song;
+        isPaused = false;
         if(currentSong != null) {
             playCurrentSong();
         }
@@ -39,6 +48,7 @@ public class MusicPlayer extends PlaybackListener {
 
     public void resetSong(){
         isPaused = false;
+        currentTimeInMilliseconds = 0;
     }
 
     public void playCurrentSong() {
@@ -52,6 +62,7 @@ public class MusicPlayer extends PlaybackListener {
             advancedPlayer.setPlayBackListener(this);
 
             startMusicThread(); // start music
+            startPlaybackSliderThread(); // update slider track
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,12 +74,52 @@ public class MusicPlayer extends PlaybackListener {
             public void run() {
                 try {
                     if(isPaused) {
+                        synchronized (playSignal) {
+                            isPaused = false;
+                            playSignal.notify();
+                        }
                         advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
-                    } else{
+                    }
+                    else{
                         advancedPlayer.play();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    // thread that handle the slider updating
+    private void startPlaybackSliderThread() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(isPaused) {
+                    try{
+                        synchronized (playSignal) {
+                            playSignal.wait();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                while(!isPaused) {
+                    try {
+                        // update cursor position
+                        currentTimeInMilliseconds++;
+                        int calculatedFrame = (int) ((double) currentTimeInMilliseconds * 2.08 * currentSong.getFrameRatePerMilliseconds());
+                        customSlider.setSliderValue(calculatedFrame);
+
+                        // update display time
+                        int minutes = currentTimeInMilliseconds / 60000;
+                        int seconds = (currentTimeInMilliseconds / 500) % 60;
+                        customSlider.updateTimeTrack(minutes, seconds);
+
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();

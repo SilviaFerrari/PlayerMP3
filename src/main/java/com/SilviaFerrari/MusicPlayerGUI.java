@@ -8,15 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Hashtable;
 
 import static java.lang.Math.sqrt;
 
 public class MusicPlayerGUI extends JFrame {
-    private final JFileChooser fileChooser;
-    private File selectedFile;
-    MusicPlayer musicPlayer = new MusicPlayer();
-
     // color configuration
     public static final Color FRAME_COLOR = new Color(22, 21, 26);
     public static final Color TEXT_COLOR = new Color(250,250,250);
@@ -24,6 +19,12 @@ public class MusicPlayerGUI extends JFrame {
     private JLabel songTitle, songArtist;
     private JPanel navigationButtons;
     private CustomSlider customSlider;
+
+    private final JFileChooser fileChooser;
+    private File selectedFile;
+    private Song songToPlay;
+
+    MusicPlayer musicPlayer = new MusicPlayer();
 
     public MusicPlayerGUI() {
         super("MP3 PLayer");
@@ -96,14 +97,14 @@ public class MusicPlayerGUI extends JFrame {
             YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
             yourSongsWindow.setVisible(true);
 
-            Song selectedSong = yourSongsWindow.getSelectedSong();
-            if (selectedSong != null) {
-                System.out.println("Selected song: " + selectedSong.getSongTitle() + " by " + selectedSong.getSongArtist());
+            songToPlay = yourSongsWindow.getSelectedSong();
+            if (songToPlay != null) {
+                System.out.println("Selected song: " + songToPlay.getSongTitle() + " by " + songToPlay.getSongArtist());
                 musicPlayer.resetSong();
-                musicPlayer.loadSong(selectedSong);
+                musicPlayer.loadSong(songToPlay);
 
-                updateSongInformation(selectedSong);
-                customSlider.updateSlider(selectedSong);
+                updateSongInformation(songToPlay);
+                customSlider.updateSlider(songToPlay);
                 pauseSongButton();
             } else {
                 System.out.println("No song selected.");
@@ -179,6 +180,8 @@ public class MusicPlayerGUI extends JFrame {
                 new Color(0xFFFFFF), // background bar
                 new Color(0xFF4081)  // cursor
         );
+
+        musicPlayer.setCustomSlider(customSlider);
 
         customSlider.setBounds(getWidth() / 2 - 350 / 2, 420, 350, 50);
         add(customSlider);
