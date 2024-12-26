@@ -6,6 +6,7 @@ import javazoom.jl.player.advanced.PlaybackListener;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MusicPlayer extends PlaybackListener {
     private Song currentSong;
@@ -21,6 +22,18 @@ public class MusicPlayer extends PlaybackListener {
 
     public void setCustomSlider(CustomSlider customSlider) {
         this.customSlider = customSlider;
+    }
+
+    public void setCurrentFrame(int frame) {
+        currentFrame = frame;
+    }
+
+    public boolean isPlaying() {
+        return !isPaused;
+    }
+
+    public void setCurrentTimeInMilliseconds(int timeInMilliseconds) {
+        currentTimeInMilliseconds = timeInMilliseconds;
     }
 
     public void loadSong(Song song) {
@@ -107,16 +120,16 @@ public class MusicPlayer extends PlaybackListener {
                 while(!isPaused) {
                     try {
                         // update cursor position
-                        currentTimeInMilliseconds++;
-                        int calculatedFrame = (int) ((double) currentTimeInMilliseconds * 2.08 * currentSong.getFrameRatePerMilliseconds());
+                        currentTimeInMilliseconds += 10;
+                        int calculatedFrame = (int) ((double) currentTimeInMilliseconds * currentSong.getFrameRatePerMilliseconds());
                         customSlider.setSliderValue(calculatedFrame);
 
                         // update display time
                         int minutes = currentTimeInMilliseconds / 60000;
-                        int seconds = (currentTimeInMilliseconds / 500) % 60;
+                        int seconds = (currentTimeInMilliseconds / 1000) % 60;
                         customSlider.updateTimeTrack(minutes, seconds);
 
-                        Thread.sleep(1);
+                        Thread.sleep(10);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -127,6 +140,11 @@ public class MusicPlayer extends PlaybackListener {
 
     public Song getCurrentSong() {
         return currentSong;
+    }
+
+    public void deleteSong(Song song) throws IOException {
+        SongDatabase database = new SongDatabase("src/main/resources/songs.json");
+        database.removeSong(song.getSongTitle());
     }
 
     @Override

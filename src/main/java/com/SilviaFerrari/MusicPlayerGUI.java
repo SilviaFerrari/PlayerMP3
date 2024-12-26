@@ -6,8 +6,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import static java.lang.Math.sqrt;
 
@@ -23,6 +26,7 @@ public class MusicPlayerGUI extends JFrame {
     private final JFileChooser fileChooser;
     private File selectedFile;
     private Song songToPlay;
+    private Song songToDelete;
 
     MusicPlayer musicPlayer = new MusicPlayer();
 
@@ -96,7 +100,6 @@ public class MusicPlayerGUI extends JFrame {
         yourSongs.addActionListener(e -> {
             YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
             yourSongsWindow.setVisible(true);
-
             songToPlay = yourSongsWindow.getSelectedSong();
             if (songToPlay != null) {
                 System.out.println("Selected song: " + songToPlay.getSongTitle() + " by " + songToPlay.getSongArtist());
@@ -134,6 +137,21 @@ public class MusicPlayerGUI extends JFrame {
 
         // delete song
         JMenuItem deleteSongs = new JMenuItem("Delete song");
+        deleteSongs.addActionListener(e -> {
+            YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
+            yourSongsWindow.setVisible(true);
+            songToDelete = yourSongsWindow.getSelectedSong();
+            if (songToDelete != null) {
+                try {
+                    musicPlayer.deleteSong(songToDelete);
+                    System.out.println("Deleted song: " + songToDelete.getSongTitle() + " by " + songToDelete.getSongArtist());
+                } catch (Exception x) {
+                    x.printStackTrace();
+                }
+            } else {
+                System.out.println("No song selected.");
+            }
+        });
         songMenu.add(deleteSongs);
 
     // playlist menu
@@ -180,10 +198,9 @@ public class MusicPlayerGUI extends JFrame {
                 new Color(0xFFFFFF), // background bar
                 new Color(0xFF4081)  // cursor
         );
-
         musicPlayer.setCustomSlider(customSlider);
-
         customSlider.setBounds(getWidth() / 2 - 350 / 2, 420, 350, 50);
+        customSlider.mouseListener(musicPlayer);
         add(customSlider);
     }
 

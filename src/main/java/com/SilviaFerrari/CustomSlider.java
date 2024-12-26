@@ -3,6 +3,8 @@ package com.SilviaFerrari;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 
 public class CustomSlider extends JPanel {
@@ -90,6 +92,33 @@ public class CustomSlider extends JPanel {
             labelBeginning.setText(minutes + ":" + seconds);
         }
     }
+
+    public void mouseListener(MusicPlayer musicPlayer) {
+        slider.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                musicPlayer.pauseSong();
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                JSlider source = (JSlider) e.getSource();
+
+                // get frame value & update current frame in musicPlayer
+                int frame = source.getValue();
+                musicPlayer.setCurrentFrame(frame);
+
+                // update current time in milliseconds and resume
+                musicPlayer.setCurrentTimeInMilliseconds((int) (frame/(musicPlayer.getCurrentSong().getFrameRatePerMilliseconds())));
+                musicPlayer.playCurrentSong();
+            }
+        });
+    }
+/*
+    private void setMax(MusicPlayer musicPlayer) {
+        slider.setMaximum((int) musicPlayer.getCurrentSong().getDurationInMilliseconds());
+        slider.setValue(0);
+    }
+*/
 
     public void setSliderValue(int frame){
         slider.setValue(frame);

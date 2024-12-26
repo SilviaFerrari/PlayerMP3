@@ -23,7 +23,7 @@ public class YourSongsWindow extends JDialog {
         getContentPane().setBackground(new Color(45, 45, 45));
 
         // window title
-        JLabel titleLabel = new JLabel("Select a song to play");
+        JLabel titleLabel = new JLabel("Select a song");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Lexend", Font.BOLD, 18));
@@ -51,7 +51,7 @@ public class YourSongsWindow extends JDialog {
         add(scrollPane, BorderLayout.CENTER);
 
         // selection button
-        JButton selectButton = new JButton("Play");
+        JButton selectButton = new JButton("OK");
         selectButton.setFocusPainted(false);
         selectButton.setBackground(new Color(0, 153, 255));
         selectButton.setForeground(Color.WHITE);
@@ -109,7 +109,7 @@ public class YourSongsWindow extends JDialog {
             if (value instanceof Song) {
                 Song song = (Song) value;
                 label.setText("<html><b>" + song.getSongTitle() + "</b> <br><i>" + song.getSongArtist() + "</i></html>");
-                label.setFont(new Font("Arial", Font.PLAIN, 14));
+                label.setFont(new Font("Lexend", Font.PLAIN, 14));
             }
             label.setOpaque(true);
             label.setBackground(isSelected ? new Color(0, 153, 255) : new Color(55, 55, 55));

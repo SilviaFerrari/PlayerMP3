@@ -38,6 +38,17 @@ public class SongDatabase {
         saveSongs();
     }
 
+    public void removeSong(String songTitle) {
+        try{
+            boolean removed = songs.removeIf(song -> song.getSongTitle().equalsIgnoreCase(songTitle));
+            if (removed) {
+                saveSongs();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public List<Song> getSongs() {
         return songs;
     }

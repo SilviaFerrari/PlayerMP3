@@ -71,10 +71,9 @@ public class SongLoadingWindow {
                 Song newSong = new Song(title, artist, selectedPath);
                 SongDatabase database = new SongDatabase("src/main/resources/songs.json");
                 database.addSong(newSong);
-
                 JOptionPane.showMessageDialog(frame, "Song added succesfull.", "Done!", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("New song added: " + newSong);
-
+                frame.dispose();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Database saving gone wrong.", "Error:", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
