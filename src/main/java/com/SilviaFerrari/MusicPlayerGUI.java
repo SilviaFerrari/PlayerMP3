@@ -6,8 +6,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -223,10 +221,29 @@ public class MusicPlayerGUI extends JFrame {
         int buttonWidth = 60;
 
         // previous button
-        JButton backButton = new JButton(loadImageIcon("src/assets/backward.png", buttonWidth));
-        backButton.setBorderPainted(false);
-        backButton.setBackground(null);
-        navigationButtons.add(backButton);
+        JButton previousButton = new JButton(loadImageIcon("src/assets/backward.png", buttonWidth));
+        previousButton.setBorderPainted(false);
+        previousButton.setBackground(null);
+        previousButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(musicPlayer.getCurrentSong() != null) {
+                    musicPlayer.stopSong();
+                    try {
+                        System.out.println("Next song: " + songToPlay.getSongTitle());
+                        musicPlayer.resetSong();
+                        songToPlay = musicPlayer.playPreviousSong();
+                        customSlider.updateSlider(songToPlay);
+                        updateSongInformation(songToPlay);
+                        pauseSongButton();
+                    }
+                    catch (Exception ex) {
+                        System.out.println("nextButton didn't work properly.");
+                    }
+                }
+            }
+        });
+        navigationButtons.add(previousButton);
 
         // play button
         JButton playButton = new JButton(loadImageIcon("src/assets/play.png", buttonWidth));
@@ -262,6 +279,25 @@ public class MusicPlayerGUI extends JFrame {
         JButton nextButton = new JButton(loadImageIcon("src/assets/forward.png", buttonWidth));
         nextButton.setBorderPainted(false);
         nextButton.setBackground(null);
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(musicPlayer.getCurrentSong() != null) {
+                    musicPlayer.stopSong();
+                    try {
+                        System.out.println("Next song: " + songToPlay.getSongTitle());
+                        musicPlayer.resetSong();
+                        songToPlay = musicPlayer.playNextSong();
+                        customSlider.updateSlider(songToPlay);
+                        updateSongInformation(songToPlay);
+                        pauseSongButton();
+                    }
+                    catch (Exception ex) {
+                        System.out.println("nextButton didn't work properly.");
+                    }
+                }
+            }
+        });
         navigationButtons.add(nextButton);
 
         add(navigationButtons);
