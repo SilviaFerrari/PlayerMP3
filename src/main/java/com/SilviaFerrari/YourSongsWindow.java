@@ -15,7 +15,7 @@ public class YourSongsWindow extends JDialog {
 
     public YourSongsWindow(JFrame parent) {
         super(parent, "Your Songs", true); // modal window
-        setSize(450, 400);
+        setSize(450, 450);
         setLocationRelativeTo(parent);
 
         // window style
@@ -43,8 +43,8 @@ public class YourSongsWindow extends JDialog {
         songJList.setCellRenderer(new SongCellRenderer());
         songJList.setBackground(new Color(55, 55, 55));
         songJList.setForeground(Color.WHITE);
-        songJList.setFont(new Font("Lexend", Font.PLAIN, 14));
-        songJList.setFixedCellHeight(40);
+        songJList.setFont(new Font("Lexend", Font.PLAIN, 18));
+        songJList.setFixedCellHeight(60);
 
         JScrollPane scrollPane = new JScrollPane(songJList);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -55,7 +55,7 @@ public class YourSongsWindow extends JDialog {
         selectButton.setFocusPainted(false);
         selectButton.setBackground(new Color(0, 153, 255));
         selectButton.setForeground(Color.WHITE);
-        selectButton.setFont(new Font("Lexend", Font.BOLD, 14));
+        selectButton.setFont(new Font("Lexend", Font.BOLD, 16));
         selectButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         selectButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -108,8 +108,8 @@ public class YourSongsWindow extends JDialog {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof Song) {
                 Song song = (Song) value;
-                label.setText("<html><b>" + song.getSongTitle() + "</b> <br><i>" + song.getSongArtist() + "</i></html>");
-                label.setFont(new Font("Lexend", Font.PLAIN, 14));
+                label.setText("<html><b>" + song.getSongTitle() + "</b> <br><i>" + song.getSongArtist() + "</i><br></html>");
+                label.setFont(new Font("Lexend", Font.PLAIN, 18));
             }
             label.setOpaque(true);
             label.setBackground(isSelected ? new Color(0, 153, 255) : new Color(55, 55, 55));
