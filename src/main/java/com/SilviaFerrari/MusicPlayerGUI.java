@@ -228,7 +228,7 @@ public class MusicPlayerGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(musicPlayer.getCurrentSong() != null) {
-                    musicPlayer.stopSong();
+                    musicPlayer.pauseSong();
                     try {
                         System.out.println("Next song: " + songToPlay.getSongTitle());
                         musicPlayer.resetSong();
@@ -283,7 +283,7 @@ public class MusicPlayerGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(musicPlayer.getCurrentSong() != null) {
-                    musicPlayer.stopSong();
+                    musicPlayer.pauseSong();
                     try {
                         System.out.println("Next song: " + songToPlay.getSongTitle());
                         musicPlayer.resetSong();

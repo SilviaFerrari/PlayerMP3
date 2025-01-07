@@ -58,7 +58,11 @@ public class MusicPlayer extends PlaybackListener {
 
     public void stopSong() {
         if(advancedPlayer != null) {
-            advancedPlayer.stop();
+            try {
+                advancedPlayer.stop();
+            } catch (Exception e) {
+                System.out.println("Error stopping the song: " + e.getMessage());
+            }
             advancedPlayer.close();
             advancedPlayer = null;
         }
@@ -88,6 +92,10 @@ public class MusicPlayer extends PlaybackListener {
     }
 
     public Song playNextSong() throws IOException {
+        if (currentSong == null) {
+            System.out.println("No current song to find the next one.");
+            return null;
+        }
         try {
             SongDatabase database = new SongDatabase("src/main/resources/songs.json");
             Song nextSong = database.getNextSong(currentSong);
@@ -102,11 +110,16 @@ public class MusicPlayer extends PlaybackListener {
             return nextSong;
         }
         catch (Exception e) {
+            System.err.println("Error while switching to the next song: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     public Song playPreviousSong() throws IOException {
+        if (currentSong == null) {
+            System.out.println("No current song to find the previous one.");
+            return null;
+        }
         try {
             SongDatabase database = new SongDatabase("src/main/resources/songs.json");
             Song previuosSong = database.getPreviousSong(currentSong);
@@ -185,16 +198,27 @@ public class MusicPlayer extends PlaybackListener {
     @Override
     public void playbackStarted(PlaybackEvent evt) {
         // called in the end/pause of the song
-        System.out.println("playback started");
+        System.out.println("Music has started.");
     }
 
     @Override
     public void playbackFinished(PlaybackEvent evt) {
         // called in the beginning of the song
-        System.out.println("playback finished");
         if(isPaused) {
             currentFrame += (int) ((double) evt.getFrame() * currentSong.getFrameRatePerMilliseconds());
-            System.out.println("Stopped at @" + currentFrame);
+            System.out.println("Paused at @" + currentFrame);
+        } else{
+            System.out.println("Song has finished.");
+            try {
+                if (currentSong != null) {
+                    Song nextSong = playNextSong();
+                    if (nextSong == null) {
+                        System.out.println("No more songs to play.");
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Failed to play next song: " + e.getMessage());
+            }
         }
     }
 }
