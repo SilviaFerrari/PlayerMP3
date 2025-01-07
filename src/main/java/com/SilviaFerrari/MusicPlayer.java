@@ -20,6 +20,18 @@ public class MusicPlayer extends PlaybackListener {
     // to fix isPause synchronous
     private static final Object playSignal = new Object();
 
+    // interface to communicate with MusicPlayerGUI
+    public interface SongChangeListener {
+        void onSongChanged(Song newSong);
+    }
+
+    private SongChangeListener songChangeListener;
+
+    public void setSongChangeListener(SongChangeListener listener) {
+        this.songChangeListener = listener;
+    }
+
+
     public void setCustomSlider(CustomSlider customSlider) {
         this.customSlider = customSlider;
     }
@@ -83,6 +95,11 @@ public class MusicPlayer extends PlaybackListener {
             advancedPlayer = new AdvancedPlayer(bufferedInputStream); // create a new player
             advancedPlayer.setPlayBackListener(this);
 
+            // notification to the listener
+            if (songChangeListener != null && currentSong != null) {
+                songChangeListener.onSongChanged(currentSong);
+            }
+
             startMusicThread(); // start music
             startPlaybackSliderThread(); // update slider track
         }
@@ -134,6 +151,7 @@ public class MusicPlayer extends PlaybackListener {
             return previuosSong;
         }
         catch (Exception e) {
+            System.err.println("Error while switching to the previous song: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

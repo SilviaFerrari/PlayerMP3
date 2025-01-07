@@ -8,7 +8,7 @@ public class App {
             // database initialization from json file
             SongDatabase database = new SongDatabase("src/main/resources/songs.json");
             List<Song> songs = database.getSongs();
-            System.out.println("Canzoni esistenti nel database:");
+            System.out.println("Library:");
             for (Song song : songs) {
                 System.out.println("Title: " + song.getSongTitle() +
                         ", Artist: " + song.getSongArtist() +

@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import static java.lang.Math.sqrt;
 
@@ -45,6 +44,18 @@ public class MusicPlayerGUI extends JFrame {
         fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("src/assets/mp3")); // default path
         fileChooser.setFileFilter(new FileNameExtensionFilter("MP3", "mp3"));
+
+        // listener communication interface
+        musicPlayer.setSongChangeListener(new MusicPlayer.SongChangeListener() {
+            @Override
+            public void onSongChanged(Song newSong) {
+                SwingUtilities.invokeLater(() -> {
+                    updateSongInformation(newSong);
+                    customSlider.updateSlider(newSong);
+                    pauseSongButton();
+                });
+            }
+        });
 
         addGuiComponents();
     }
@@ -105,10 +116,6 @@ public class MusicPlayerGUI extends JFrame {
                 System.out.println("Selected song: " + songToPlay.getSongTitle());
                 musicPlayer.resetSong();
                 musicPlayer.loadSong(songToPlay);
-
-                updateSongInformation(songToPlay);
-                customSlider.updateSlider(songToPlay);
-                pauseSongButton();
             } else {
                 System.out.println("No song selected.");
             }
@@ -233,9 +240,6 @@ public class MusicPlayerGUI extends JFrame {
                         System.out.println("Next song: " + songToPlay.getSongTitle());
                         musicPlayer.resetSong();
                         songToPlay = musicPlayer.playPreviousSong();
-                        customSlider.updateSlider(songToPlay);
-                        updateSongInformation(songToPlay);
-                        pauseSongButton();
                     }
                     catch (Exception ex) {
                         System.out.println("nextButton didn't work properly.");
@@ -288,9 +292,6 @@ public class MusicPlayerGUI extends JFrame {
                         System.out.println("Next song: " + songToPlay.getSongTitle());
                         musicPlayer.resetSong();
                         songToPlay = musicPlayer.playNextSong();
-                        customSlider.updateSlider(songToPlay);
-                        updateSongInformation(songToPlay);
-                        pauseSongButton();
                     }
                     catch (Exception ex) {
                         System.out.println("nextButton didn't work properly.");
