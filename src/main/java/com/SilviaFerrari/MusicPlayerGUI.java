@@ -84,19 +84,21 @@ public class MusicPlayerGUI extends JFrame {
 
     private void addToolBar() {
         JToolBar toolBar = new JToolBar();
-        toolBar.setBounds(0, 0, getWidth(), 20);
+        toolBar.setBounds(0, 0, getWidth(), 30);
         toolBar.setFloatable(false);    // to prevent floating
 
-    // drop down menu
+        // drop down menu
         JMenuBar menuBar = new JMenuBar();
         toolBar.add(menuBar);
 
-    // song menu
-        JMenu songMenu = new JMenu("Song");
+        // song menu
+        JMenu songMenu = new JMenu("Options");
+        songMenu.setFont(new Font("Lexend", Font.BOLD, 18));
         menuBar.add(songMenu);
 
         // play song
-        JMenuItem yourSongs = new JMenuItem("Your songs");
+        JMenuItem yourSongs = new JMenuItem("Library");
+        yourSongs.setFont(new Font("Lexend", Font.BOLD, 16));
         yourSongs.addActionListener(e -> {
             YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
             yourSongsWindow.setVisible(true);
@@ -116,7 +118,8 @@ public class MusicPlayerGUI extends JFrame {
         songMenu.add(yourSongs);
 
         // load item
-        JMenuItem loadSong = new JMenuItem("Load song");
+        JMenuItem loadSong = new JMenuItem("Add song");
+        loadSong.setFont(new Font("Lexend", Font.BOLD, 16));
         loadSong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -137,6 +140,7 @@ public class MusicPlayerGUI extends JFrame {
 
         // delete song
         JMenuItem deleteSongs = new JMenuItem("Delete song");
+        deleteSongs.setFont(new Font("Lexend", Font.BOLD, 16));
         deleteSongs.addActionListener(e -> {
             YourSongsWindow yourSongsWindow = new YourSongsWindow(null);
             yourSongsWindow.setVisible(true);
@@ -153,22 +157,6 @@ public class MusicPlayerGUI extends JFrame {
             }
         });
         songMenu.add(deleteSongs);
-
-    // playlist menu
-        JMenu playListMenu = new JMenu("Playlist");
-        menuBar.add(playListMenu);
-
-        // create item
-        JMenuItem createPlayList = new JMenuItem("Create playlist");
-        playListMenu.add(createPlayList);
-
-        // delete item
-        JMenuItem deletePlayList = new JMenuItem("Delete playlist");
-        playListMenu.add(deletePlayList);
-
-        // rename item
-        JMenuItem renamePlayList = new JMenuItem("Rename playlist");
-        playListMenu.add(renamePlayList);
 
         add(toolBar);
     }
@@ -208,7 +196,6 @@ public class MusicPlayerGUI extends JFrame {
         if(musicPlayer.getCurrentSong() != null){
             JButton playButton = (JButton) navigationButtons.getComponent(1);
             JButton pauseButton = (JButton) navigationButtons.getComponent(2);
-
             // turn off play button
             playButton.setEnabled(false);
             playButton.setVisible(false);
@@ -221,7 +208,6 @@ public class MusicPlayerGUI extends JFrame {
     private void playSongButton() {
         JButton playButton = (JButton) navigationButtons.getComponent(1);
         JButton pauseButton = (JButton) navigationButtons.getComponent(2);
-
         // turn on play button
         playButton.setEnabled(true);
         playButton.setVisible(true);

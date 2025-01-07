@@ -20,11 +20,6 @@ public class App {
         }
 
         // to ensure GUI is executed on the Event Dispatch Thread
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new MusicPlayerGUI().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new MusicPlayerGUI().setVisible(true));
     }
 }
