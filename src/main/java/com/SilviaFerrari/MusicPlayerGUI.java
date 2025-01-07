@@ -104,7 +104,7 @@ public class MusicPlayerGUI extends JFrame {
             yourSongsWindow.setVisible(true);
             songToPlay = yourSongsWindow.getSelectedSong();
             if (songToPlay != null) {
-                System.out.println("Selected song: " + songToPlay.getSongTitle() + " by " + songToPlay.getSongArtist());
+                System.out.println("Selected song: " + songToPlay.getSongTitle());
                 musicPlayer.resetSong();
                 musicPlayer.loadSong(songToPlay);
 

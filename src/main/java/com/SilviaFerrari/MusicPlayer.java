@@ -28,12 +28,12 @@ public class MusicPlayer extends PlaybackListener {
         currentFrame = frame;
     }
 
-    public boolean isPlaying() {
-        return !isPaused;
-    }
-
     public void setCurrentTimeInMilliseconds(int timeInMilliseconds) {
         currentTimeInMilliseconds = timeInMilliseconds;
+    }
+
+    public Song getCurrentSong() {
+        return currentSong;
     }
 
     public void loadSong(Song song) {
@@ -42,6 +42,11 @@ public class MusicPlayer extends PlaybackListener {
         if(currentSong != null) {
             playCurrentSong();
         }
+    }
+
+    public void deleteSong(Song song) throws IOException {
+        SongDatabase database = new SongDatabase("src/main/resources/songs.json");
+        database.removeSong(song.getSongTitle());
     }
 
     public void pauseSong() {
@@ -66,8 +71,8 @@ public class MusicPlayer extends PlaybackListener {
 
     public void playCurrentSong() {
         try{
-            // mp3 data reading
             stopSong();
+
             FileInputStream fileInputStream = new FileInputStream(currentSong.getSongPath());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
 
@@ -76,8 +81,47 @@ public class MusicPlayer extends PlaybackListener {
 
             startMusicThread(); // start music
             startPlaybackSliderThread(); // update slider track
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public Song playNextSong() throws IOException {
+        try {
+            SongDatabase database = new SongDatabase("src/main/resources/songs.json");
+            Song nextSong = database.getNextSong(currentSong);
+            stopSong();
+            resetSong();
+
+            if (nextSong == null) {
+                System.out.println("No song available.");
+                return null;
+            }
+            loadSong(nextSong);
+            return nextSong;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Song playPreviousSong() throws IOException {
+        try {
+            SongDatabase database = new SongDatabase("src/main/resources/songs.json");
+            Song previuosSong = database.getPreviousSong(currentSong);
+            stopSong();
+            resetSong();
+
+            if (previuosSong == null) {
+                System.out.println("No song available.");
+                return null;
+            }
+            loadSong(previuosSong);
+            return previuosSong;
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -136,15 +180,6 @@ public class MusicPlayer extends PlaybackListener {
                 }
             }
         }).start();
-    }
-
-    public Song getCurrentSong() {
-        return currentSong;
-    }
-
-    public void deleteSong(Song song) throws IOException {
-        SongDatabase database = new SongDatabase("src/main/resources/songs.json");
-        database.removeSong(song.getSongTitle());
     }
 
     @Override

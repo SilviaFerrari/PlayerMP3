@@ -19,6 +19,10 @@ public class SongDatabase {
         this.songs = loadSongs();
     }
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
     // load songs from json
     private List<Song> loadSongs() throws IOException {
         File file = new File(jsonPath);
@@ -49,7 +53,45 @@ public class SongDatabase {
         }
     }
 
-    public List<Song> getSongs() {
-        return songs;
+    private int getCurrentIndex(Song currentSong) {
+        int currentIndex = -1;
+        for (int i = 0; i < songs.size(); i++) {
+            if (songs.get(i).getSongPath().equals(currentSong.getSongPath())) {
+                currentIndex = i;
+                break;
+            }
+        }
+        return currentIndex;
+    }
+
+    public Song getNextSong(Song currentSong) {
+        if (songs.isEmpty()) {
+            return null; // json is empty
+        }
+
+        // if the songs doesn't exist, take the first
+        int currentIndex = getCurrentIndex(currentSong);
+        if (currentIndex == -1) {
+            return songs.getFirst();
+        }
+
+        // next index calculation
+        int nextIndex = (currentIndex + 1) % songs.size();
+        return songs.get(nextIndex);
+    }
+
+    public Song getPreviousSong(Song currentSong) {
+        if (songs.isEmpty()) {
+            return null;
+        }
+
+        // if the songs doesn't exist, take the last
+        int currentIndex = getCurrentIndex(currentSong);
+        if (currentIndex == -1) {
+            return songs.getLast();
+        }
+
+        int previousIndex = (currentIndex - 1 + songs.size()) % songs.size();
+        return songs.get(previousIndex);
     }
 }
